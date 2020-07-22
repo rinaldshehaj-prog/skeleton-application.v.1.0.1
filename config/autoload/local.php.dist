@@ -11,5 +11,10 @@
  * credentials from accidentally being committed into version control.
  */
 
+
 return [
+    'db' => [
+            'driver' => 'Pdo',
+            'dsn'    => sprintf('sqlite:%s/data/zftutorial.db', realpath(getcwd())),
+        ],
 ];

@@ -1,0 +1,66 @@
+<?php
+$title = 'Register new user';
+$this->headTitle($title);
+?>
+    <h1><?= $this->escapeHtml($title) ?></h1>
+<?php
+
+$real_name = $form->get('real_name');
+$real_name->setAttribute('id', 'real_name');
+$real_name->setAttribute('class', 'form-control');
+$real_name->setAttribute('placeholder', 'Real Name');
+
+$username = $form->get('username');
+$username->setAttribute('id', 'username');
+$username->setAttribute('class', 'form-control');
+$username->setAttribute('placeholder', 'Username');
+
+$password = $form->get('password');
+$password->setAttribute('id', 'password');
+$password->setAttribute('class', 'form-control');
+$password->setAttribute('placeholder', 'Password');
+
+// This provides CSS classes for the submit button:
+$submit = $form->get('submit');
+$submit->setAttribute('class', 'btn btn-primary');
+
+$form->setAttribute('action', $this->url('auth', ['action' => 'register']));
+$form->prepare();
+
+echo $this->form()->openTag($form);
+?>
+<?php // Wrap the elements in divs marked as form groups, and render the
+// label, element, and errors separately within ?>
+
+
+<div class="row" style="margin: 0 auto;">
+    <div class="col-md-offset-4 col-md-5">
+        <div class="form-group">
+            <?= $this->formLabel($real_name) ?>
+            <?= $this->formElement($real_name) ?>
+            <?= $this->formElementErrors()->render($real_name, ['class' => 'help-block']) ?>
+        </div>
+
+        <div class="form-group">
+            <?= $this->formLabel($username) ?>
+            <?= $this->formElement($username) ?>
+            <?= $this->formElementErrors()->render($username, ['class' => 'help-block']) ?>
+        </div>
+
+        <div class="form-group">
+            <?= $this->formLabel($password) ?>
+            <?= $this->formElement($password) ?>
+            <?= $this->formElementErrors()->render($password, ['class' => 'help-block']) ?>
+        </div>
+
+
+
+        <?php
+        echo $this->formSubmit($submit);
+        echo $this->formHidden($form->get('id'));
+        echo $this->form()->closeTag();
+        ?>
+    </div>
+</div>
+
+
