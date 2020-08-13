@@ -86,12 +86,32 @@ class Module implements ConfigProviderInterface
 
     public function onBootstrap(MvcEvent $event)
     {
+
         // Get event manager.
         $eventManager = $event->getApplication()->getEventManager();
         $sharedEventManager = $eventManager->getSharedManager();
         // Register the event listener method.
         $sharedEventManager->attach(AbstractActionController::class,
             MvcEvent::EVENT_DISPATCH, [$this, 'onDispatch'], 100);
+
+        $sessionManager = $event->getApplication()->getServiceManager()->get('Zend\Session\SessionManager');
+
+        $this->forgetInvalidSession($sessionManager);
+    }
+
+    protected function forgetInvalidSession($sessionManager)
+    {
+        try {
+            $sessionManager->start();
+            return;
+        } catch (\Exception $e) {
+        }
+        /**
+         * Session validation failed: toast it and carry on.
+         */
+        // @codeCoverageIgnoreStart
+        session_unset();
+        // @codeCoverageIgnoreEnd
     }
 
     public function onDispatch(MvcEvent $event)
@@ -114,6 +134,7 @@ class Module implements ConfigProviderInterface
 
             // Remember the URL of the page the user tried to access. We will
             // redirect the user to that URL after successful login.
+
             $uri = $event->getApplication()->getRequest()->getUri();
 
             // Make the URL relative (remove scheme, user info, host name and port)
@@ -125,7 +146,8 @@ class Module implements ConfigProviderInterface
             $redirectUrl = $uri->toString();
 
             // Redirect the user to the "Login" page.
-            return $controller->redirect()->toRoute('auth', ['action'=>'login'],
+
+            return $controller->redirect()->toRoute('auth', [],
                 ['query' => ['redirectUrl' => $redirectUrl]]);
         }
     }

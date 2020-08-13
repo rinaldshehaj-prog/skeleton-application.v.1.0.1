@@ -4,6 +4,7 @@
 namespace Album\Model;
 
 
+use DomainException;
 use Zend\Filter\StringTrim;
 use Zend\Filter\StripTags;
 use Zend\Filter\ToInt;

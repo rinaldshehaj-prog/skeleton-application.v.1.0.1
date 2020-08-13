@@ -38,6 +38,7 @@ class AuthController extends AbstractActionController
 
 
         $form = new LoginForm();
+
         $form->get('redirect_url')->setValue($redirectUrl);
 
         $isLoginError = false;

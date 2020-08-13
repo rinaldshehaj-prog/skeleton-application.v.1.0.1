@@ -26,6 +26,7 @@ return [
         'cookie_lifetime' => 60*60*1,
         // Stored on server for 30 days
         'gc_maxlifetime' => 60*60*24*30,
+        'save_path' => '/var/www/html/skeleton-application/data/sessions'
     ],
     'session_storage' => [
         'type' => SessionArrayStorage::class
