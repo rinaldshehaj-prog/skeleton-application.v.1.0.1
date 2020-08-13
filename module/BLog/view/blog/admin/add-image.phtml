@@ -1,0 +1,39 @@
+<?php
+$title = 'Add new post';
+$this->headTitle($title);
+?>
+<h1><?= $this->escapeHtml($title) ?></h1>
+<?php
+
+$post = $form->get('image_content');
+$post->setAttribute('id', 'image_content');
+$post->setAttribute('class', 'form-control');
+
+
+// This provides CSS classes for the submit button:
+$submit = $form->get('submit');
+$submit->setAttribute('class', 'btn btn-primary');
+
+$form->setAttribute('action', $this->url('admin', ['action' => 'addImage']));
+$form->setAttribute('method', 'POST');
+$form->prepare();
+
+echo $this->form()->openTag($form);
+?>
+<?php // Wrap the elements in divs marked as form groups, and render the
+// label, element, and errors separately within ?>
+<div class="form-group">
+    <?= $this->formLabel($post) ?>
+    <?= $this->formElement($post) ?>
+    <?= $this->formElementErrors()->render($post, ['class' => 'help-block']) ?>
+</div>
+
+
+
+<?php
+echo $this->formSubmit($submit);
+echo $this->formHidden($form->get('id'));
+echo $this->form()->closeTag();
+?>
+
+

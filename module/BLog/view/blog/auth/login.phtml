@@ -1,0 +1,52 @@
+<?php
+
+$this->headTitle('Sign in');
+
+
+$form->get('username')->setAttributes([
+'class'=>'form-control',
+'placeholder'=>'Username',
+'required' => true,
+'autofocus' => true
+])
+->setLabelAttributes([
+'class' => 'sr-only'
+]);
+
+$form->get('password')->setAttributes([
+'class'=>'form-control',
+'placeholder'=>'Password',
+'required' => true,
+'autofocus' => true
+])
+->setLabelAttributes([
+'class' => 'sr-only'
+]);
+?>
+
+
+
+<div class="row" style="margin: 0 auto;">
+    <div class="col-md-offset-4 col-md-5">
+        <form class="form-signin pt-3" method="POST" action="<?= $this->url('auth', ['action'=> 'login'])?>">
+            <h2 class="form-signin-heading">Please sign in</h2>
+
+            <?php if ($isLoginError): ?>
+            <div class="alert alert-warning" role="alert">
+                Incorrect login and/or password.
+
+            </div>
+            <?php endif; ?>
+
+            <?= $this->formLabel($form->get('username')); ?>
+            <?= $this->formElement($form->get('username')); ?>
+            <br>
+            <?= $this->formLabel($form->get('password')); ?>
+            <?= $this->formElement($form->get('password')); ?>
+            <br>
+            <?= $this->formElement($form->get('redirect_url')); ?>
+<!--            <?//= $this->formElement($form->get('csrf')) ?>-->
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        </form>
+    </div>
+</div>
