@@ -14,8 +14,6 @@ $post->setAttribute('class', 'form-control');
 $submit = $form->get('submit');
 $submit->setAttribute('class', 'btn btn-primary');
 
-$form->setAttribute('action', $this->url('admin', ['action' => 'addImage']));
-$form->setAttribute('method', 'POST');
 $form->prepare();
 
 echo $this->form()->openTag($form);

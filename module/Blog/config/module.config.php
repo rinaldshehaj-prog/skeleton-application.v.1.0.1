@@ -22,10 +22,14 @@ return [
             'blog' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/blog[/:action]',
+                    'route'    => '/blog[/:action[/:id]]',
                     'defaults' => [
                         'controller' => Controller\BlogController::class,
                         'action'     => 'index',
+                    ],
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
                     ],
                 ],
             ],

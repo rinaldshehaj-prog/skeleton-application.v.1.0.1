@@ -15,14 +15,14 @@ class Image
 
     public function exchangeArray(array $data){
         $this->id     = !empty($data['id']) ? $data['id'] : null;
-        $this->image_content = !empty($data['image_content']['name']) ? $data['image_content']['name'] : null;
-        $this->image_type  = !empty($data['image_content']['type']) ? $data['image_content']['type'] : null;
+        $this->image_content = !empty($data['image_content']) ? $data['image_content'] : null;
+        $this->image_type  = !empty($data['image_type']) ? $data['image_type'] : null;
         $this->post_id  = !empty($data['post_id']) ? $data['post_id'] : null;
     }
 
     public function getArrayCopy(){
         return[
-          'id' => $this->id,
+            'id' => $this->id,
             'image_content'=>$this->image_content,
             'image_type'=>$this->image_type,
             'post_id'=>$this->post_id

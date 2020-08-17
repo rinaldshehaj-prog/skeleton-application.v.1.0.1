@@ -1,0 +1,23 @@
+<h1>Welcome to our blog</h1>
+
+
+
+
+<?php
+
+
+for ($i = 0; $i < count($data['post']); $i++) :?>
+
+<h4><a href="<?= $this->url('blog', ['action'=>'viewItem', 'id'=>$data['post'][$i]['id']])?>"><?= $data['content'][$i]['title']?></a></h4>
+
+    <img src="/img/blog/<?= $data['images'][$i]['image_content']?>"  alt="No Image">
+
+<p><?= $data['post'][$i]['create_time']?></p>
+
+<p>
+    <?= $data['content'][$i]['content'] ?>
+</p>
+
+<?php
+endfor;
+?>

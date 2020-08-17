@@ -35,8 +35,11 @@ class AdminController extends AbstractActionController
 
     public function indexAction()
     {
+
+        $data = $this->postTable->fetchAll();
+
         return new ViewModel([
-            'posts'=>$this->postTable->fetchAll()
+            'data' => $data
             ]);
     }
 
@@ -64,35 +67,46 @@ class AdminController extends AbstractActionController
         $this->translaterTable->saveContent($content);
 
 
-        return $this->redirect()->toRoute('admin', ['action'=>'addImage', 'post_id'=> $post_id], null, true);
+        return $this->redirect()->toRoute('admin', ['action'=>'addImage', 'post_id'=> $post_id]);
 
 
     }
 
     public function addContentAction(){
 
-        $form = new AddContentForm();
-        $form->get('submit')->setValue('Next');
-        $request = $this->getRequest();
-        $post_id = $this->params()->fromRoute('post_id');
+        $id = (int) $this->params()->fromRoute('post_id', 0);
 
-        if(! $request->isPost()) {
-            $viewData = ['form' => $form];
-            $viewModel = new ViewModel();
-            $viewModel->setTerminal(true);
-            $viewModel->setVariables($viewData);
-            return $viewModel;
+        if (0 === $id) {
+            return $this->redirect()->toRoute('admin', ['action' => 'addPost']);
         }
 
-        $content = new Translater();
-        $form->setData($request->getPost());
+        try {
+            $content = $this->translaterTable->getContentByPostId($id);
+        } catch (Exception $e) {
+            return $this->redirect()->toRoute('admin', ['action' => 'addPost']);
+        }
 
+        $form = new AddContentForm();
+        $request = $this->getRequest();
+        $form->bind($content);
+        $viewData = ['form'=>$form, 'id'=>$content->id, 'post_id'=>$id];
 
-        $content->post_id = $post_id;
-        $content->exchangeArray($form->getData());
-        $this->translaterTable->saveContent($content);
-        return $this->redirect()->toRoute('blog');
+        if ($request->isPost()) {
+            $form->setData($data = $request->getPost()->toArray());
 
+            if ($form->isValid()) {
+
+                $content->exchangeArray((array) $form->getData());
+                $this->translaterTable->saveContent($content);
+
+                return $this->redirect()->toRoute('blog');
+            }
+        }
+
+        $viewModel = new ViewModel();
+        $viewModel->setTerminal(true);
+        $viewModel->setVariables($viewData);
+        return $viewModel;
     }
 
     public function addImageAction(){
@@ -108,21 +122,28 @@ class AdminController extends AbstractActionController
             return $this->redirect()->toRoute('admin', ['action' => 'addPost']);
         }
         $form = new AddImageForm();
-        $form->bind($image);
-        $form->get('submit')->setAttribute('value', 'Next');
         $request = $this->getRequest();
-        $viewData = ['form'=>$form, 'post_id'=>$id, 'id'=>$image->id];
+        $form->bind($image);
+        $viewData = ['form'=>$form, 'id'=>$image->id, 'post_id'=>$id];
+
 
         if ($request->isPost()) {
+
             $data = array_merge_recursive(
                 $request->getPost()->toArray(),
                 $request->getFiles()->toArray()
             );
-
             $form->setData($data);
             if ($form->isValid()) {
-                $data = $form->getData();
-                $image->exchangeArray((array) $data);
+                $data = (array) $form->getData();
+                $fileInfo = [
+                    'id' => $data['id'],
+                    'image_content' => $data['image_content']['name'],
+                    'image_type'=> $data['image_content']['type'],
+                    'post_id'=>$data['post_id']
+                ];
+
+                $image->exchangeArray($fileInfo);
                 $this->imageTable->saveImage($image);
 
                 return $this->redirect()->toRoute('admin', ['action' => 'addContent', 'post_id' => $image->post_id]);
@@ -135,10 +156,5 @@ class AdminController extends AbstractActionController
         return $viewModel;
     }
 
-    public function editAction(){}
-
-    public function deleteAction(){
-
-    }
 
 }

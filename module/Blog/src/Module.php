@@ -106,7 +106,10 @@ class Module
             'factories' => [
                 Controller\BlogController::class => function ($container) {
                     return new Controller\BlogController(
-                        $container->get(Model\PostTable::class));
+                        $container->get(Model\PostTable::class),
+                        $container->get(Model\TranslaterTable::class),
+                        $container->get(Model\ImageTable::class),
+                        $container->get(Service\ImageManager::class));
                 },
                 Controller\AdminController::class => function ($container) {
                     $translaterTable = $container->get(Model\TranslaterTable::class);

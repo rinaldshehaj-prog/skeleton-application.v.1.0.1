@@ -6,6 +6,7 @@ namespace Blog\Model;
 
 use RuntimeException;
 use Zend\Db\Sql\Select;
+use Zend\Db\Sql\Sql;
 use Zend\Db\TableGateway\TableGatewayInterface;
 
 class PostTable
@@ -24,9 +25,21 @@ class PostTable
     }
 
     public function fetchAll(){
-        $select = new Select( array("p" => $this->tableGateway));
-        $select->join(array('t' => $this->translatorGateway), 't.post_id = p.id', array('title', 'content'));
-        $select->join(array('i' => $this->imageGateway), 'i.post_id = p.id', array('image_content', 'image_type'));
+
+        $select = new Select("Post");
+        $select->columns(array('id', 'create_time'));
+        $select->join('Translater', 'Post.id = Translater.post_id', array( 'title', 'content'));
+        $select->join('Images', 'Post.id = Images.post_id', array( 'image_content', 'image_type'));
+
+
+        $resultSet = $this->tableGateway->selectWith($select)->toArray();
+
+        return [
+            'post' => $resultSet,
+            'content'=> $resultSet = $this->translatorGateway->selectWith($select)->toArray(),
+            'images'=>$resultSet = $this->imageGateway->selectWith($select)->toArray(),
+        ];
+
     }
 
     public function getPost($id){

@@ -1,0 +1,26 @@
+<?php
+// module/Album/view/album/album/index.phtml:
+
+$title = 'My posts';
+$this->headTitle($title);
+?>
+
+
+<h1 id="myAlbumsTitle"><?= $this->escapeHtml($title) ?></h1>
+
+<table id="indexTable" class="table">
+    <tr>
+        <td colspan="3"><a id = "create" class="btn" href="<?= $this->url('admin', ['action'=>'addPost'])?>">Add new post</a></td>
+    </tr>
+    <tr>
+        <th>Title</th>
+        <th>Created time</th>
+    </tr>
+    <?php
+
+    for ($i = 0; $i < count($data['post']); $i++) :?>
+        <td><?= $data['content'][$i]['title']?></td>
+        <td><?= $data['post'][$i]['create_time']?></td>
+
+    <?php endfor;?>
+</table>

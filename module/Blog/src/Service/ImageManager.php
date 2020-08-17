@@ -6,7 +6,16 @@ namespace Blog\Service;
 
 class ImageManager
 {
-    private $saveToDir = './public/images/';
+    private $saveToDir;
+
+    public function __construct(){
+        $this->setSaveToDir();
+    }
+
+    public function setSaveToDir(){
+        $this->saveToDir = $_SERVER['DOCUMENT_ROOT'] . '/img/blog/';
+    }
+
 
 
     public function getSaveToDir()

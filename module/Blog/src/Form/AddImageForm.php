@@ -6,7 +6,9 @@ namespace Blog\Form;
 
 use Zend\Form\Form;
 use Zend\Form\Element;
+use Zend\InputFilter\FileInput;
 use Zend\InputFilter\InputFilter;
+
 
 class AddImageForm extends Form
 {
@@ -15,7 +17,7 @@ class AddImageForm extends Form
     {
         parent::__construct('addImage-form');
 
-//        $this->setAttribute('method', 'POST');
+        $this->setAttribute('method', 'POST');
 
         $this->setAttribute('enctype', 'multipart/form-data');
 
@@ -53,7 +55,7 @@ class AddImageForm extends Form
             'type' => 'submit',
             'attributes' => [
                 'value' => 'Next',
-                'id'    => 'submitbutton',
+                'id'    => 'submit',
             ],
         ]);
 
@@ -64,7 +66,7 @@ class AddImageForm extends Form
         $inputFilter = new InputFilter();
         $this->setInputFilter($inputFilter);
 
-        // Add validation rules for the "file" field.
+        // Add validation rules for the "image_content" field.
         $inputFilter->add([
             'type'     => 'Zend\InputFilter\FileInput',
             'name'     => 'image_content',
@@ -78,28 +80,19 @@ class AddImageForm extends Form
                     ]
                 ],
                 ['name'    => 'FileIsImage'],
-                [
-                    'name'    => 'FileImageSize',
-                    'options' => [
-                        'minWidth'  => 128,
-                        'minHeight' => 128,
-                        'maxWidth'  => 4096,
-                        'maxHeight' => 4096
-                    ]
-                ],
             ],
-//            'filters'  => [
-//                [
-//                    'name' => 'FileRenameUpload',
-//                    'options' => [
-//                        'target' => './public/images',
-//                        'useUploadName' => true,
-//                        'useUploadExtension' => true,
-//                        'overwrite' => true,
-//                        'randomize' => false
-//                    ]
-//                ]
-//            ],
+            'filters'  => [
+                [
+                    'name' => 'FileRenameUpload',
+                    'options' => [
+                        'target' => $_SERVER['DOCUMENT_ROOT'] . '/img/blog/',
+                        'useUploadName' => true,
+                        'useUploadExtension' => true,
+                        'overwrite' => true,
+                        'randomize' => false
+                    ]
+                ]
+            ],
         ]);
     }
 

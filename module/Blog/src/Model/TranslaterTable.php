@@ -60,4 +60,18 @@ class TranslaterTable
 
         $this->tableGateway->update($data, ['id' => $id]);
     }
+
+    public function getContentByPostId($post_id){
+        $post_id = (int) $post_id;
+        $rowset = $this->tableGateway->select(['post_id' => $post_id]);
+        $row = $rowset -> current();
+        if(! $row){
+            throw new RuntimeException(sprintf(
+                'Could not find row with identifier %d',
+                $post_id
+            ));
+        }
+
+        return $row;
+    }
 }

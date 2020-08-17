@@ -22,7 +22,7 @@ class ImageTable
 
     public function getImages($id){
         $id = (int) $id;
-        $rowset = $this->tableGateway->select(['post_id' => $id]);
+        $rowset = $this->tableGateway->select(['id' => $id]);
         $row = $rowset -> current();
 
         if(! $row){
@@ -39,7 +39,6 @@ class ImageTable
         $post_id = (int) $post_id;
         $rowset = $this->tableGateway->select(['post_id' => $post_id]);
         $row = $rowset -> current();
-
         if(! $row){
             throw new RuntimeException(sprintf(
                 'Could not find row with identifier %d',
@@ -64,7 +63,6 @@ class ImageTable
             $this->tableGateway->insert($data);
             return;
         }
-
         try{
             $this->getImages($id);
         }catch (RuntimeException $e) {
